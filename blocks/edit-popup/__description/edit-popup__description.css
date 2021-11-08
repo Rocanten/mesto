@@ -7,6 +7,10 @@
     border-bottom-color: rgba(0, 0, 0, .2);
     border-bottom-style: solid;
     border-bottom-width: 1px;
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: normal;
+    font-style: normal;
 }
 
 .edit-popup__description::placeholder {
