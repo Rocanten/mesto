@@ -1,0 +1,15 @@
+.favourite-button {
+    background-image: url("../../images/favourite.svg");
+    width: 22px;
+    height: 19px;
+    background-color: #fff;
+    background-position: center;
+    border: none;
+    margin-right: 18px;
+}
+
+.favourite-button:hover {
+    opacity: 0.5;
+    transition: opacity 0.5s;
+    cursor: pointer;
+}

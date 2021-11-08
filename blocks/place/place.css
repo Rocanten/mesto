@@ -1,0 +1,11 @@
+.place {
+    width: 282px;
+    height: 362px;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+}

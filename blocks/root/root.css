@@ -1,0 +1,15 @@
+.root {
+    max-width: 1184px;
+    width: 880px;
+    margin: 0 auto 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media screen and (max-width: 900px) {
+    .root {
+        width: 100%;
+    }
+}

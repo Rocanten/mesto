@@ -1,0 +1,10 @@
+.place__title {
+    margin-left: 18px;
+    font-size: 24px;
+    line-height: 29px;
+    max-width: 186px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
