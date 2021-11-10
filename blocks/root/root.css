@@ -1,7 +1,6 @@
 .root {
-    max-width: 1184px;
-    width: 880px;
-    margin: 0 auto 0 auto;
+    max-width: 1240px;
+    margin: auto;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -10,6 +9,6 @@
 
 @media screen and (max-width: 900px) {
     .root {
-        width: 100%;
+        width: 90%;
     }
 }

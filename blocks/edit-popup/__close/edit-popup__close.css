@@ -11,6 +11,12 @@
     right: -40px;
 }
 
+.edit-popup__close:hover {
+    opacity: 0.6;
+    transition: opacity 0.5s;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 730px) {
     .edit-popup__close {
         width: 20px;
