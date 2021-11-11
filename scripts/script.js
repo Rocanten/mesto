@@ -3,32 +3,27 @@ let editButton = document.querySelector('.profile__edit-button')
 let closeButton = document.querySelector('.edit-popup__close')
 
 let formElement = document.querySelector('.edit-popup__form')
-let nameInput = formElement.querySelector('.edit-popup__name')
-let jobInput = formElement.querySelector('.edit-popup__description')
+let nameInput = formElement.querySelector('.edit-popup__input_field_name')
+let jobInput = formElement.querySelector('.edit-popup__input_field_description')
 
 let profileName = document.querySelector('.profile__name')
 let profileDescription = document.querySelector('.profile__description')
 
-let newName
-let newDescription
-
-function openEditPopup(evt) {
+function openEditPopup() {
     nameInput.value = profileName.textContent
     jobInput.value = profileDescription.textContent
     editPopup.classList.add('edit-popup_opened')
 }
 
-function closeEditPopup(evt) {
+function closeEditPopup() {
     editPopup.classList.remove('edit-popup_opened')
 }
 
 function formSubmitHandler (evt) {
     evt.preventDefault();
 
-    newName = nameInput.value
-    newDescription = jobInput.value
-    profileName.textContent = newName
-    profileDescription.textContent = newDescription
+    profileName.textContent = nameInput.value
+    profileDescription.textContent = jobInput.value
     closeEditPopup()
 }
 
