@@ -16,9 +16,17 @@
     cursor: pointer;
 }
 
+@media screen and (max-width: 790px) {
+    .profile__add-button {
+        width: 50px;
+        justify-self: end;
+    }
+}
+
 @media screen and (max-width: 730px) {
     .profile__add-button {
         width: 100%;
         margin-top: 36px;
+        background-size: 16px 16px;
     }
 }

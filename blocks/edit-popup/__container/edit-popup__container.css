@@ -1,5 +1,6 @@
 .edit-popup__container {
     width: 430px;
+    min-height: 330px;
     background-color: #fff;
     z-index: 1;
     border-radius: 10px;
