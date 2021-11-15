@@ -1,4 +1,4 @@
-.edit-popup {
+.photo-popup {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -9,8 +9,9 @@
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.9);
+    flex-direction: column;
+    visibility: hidden;
     transition: visibility linear 0.35s, opacity linear 0.35s;
     opacity: 0;
-    visibility: hidden;
 }

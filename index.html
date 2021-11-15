@@ -25,42 +25,12 @@
         <button type="button" class="profile__add-button"></button>
       </section>
       <section class="places">
-        <article class="place">
-          <img src="images/kirill-pershin-1088404-unsplash-optimized.jpg" class="place__image" alt="Карачаевск">
-          <h2 class="place__title">Карачаевск</h2>
-          <button type="button" class="favourite-button" aria-label="Добавить в избранное"></button>
-        </article>
-        <article class="place">
-          <img src="images/kirill-pershin-1404681-unsplash-optimized.jpg" aria-label="Добавить в избранное" class="place__image" alt="Карачаевск">
-          <h2 class="place__title">Гора Эльбрус</h2>
-          <button type="button" class="favourite-button"></button>
-        </article>
-        <article class="place">
-          <img src="images/kirill-pershin-1556355-unsplash-optimized.jpg" class="place__image" alt="Карачаевск">
-          <h2 class="place__title">Домбай</h2>
-          <button type="button" class="favourite-button favourite-button_active" aria-label="Убрать из избранное"></button>
-        </article>
-        <article class="place">
-          <img src="images/kirill-pershin-1404681-unsplash-optimized.jpg" class="place__image" alt="Карачаевск">
-          <h2 class="place__title">Гора Эльбрус</h2>
-          <button type="button" class="favourite-button" aria-label="Добавить в избранное"></button>
-        </article>
-        <article class="place">
-          <img src="images/kirill-pershin-1556355-unsplash-optimized.jpg" class="place__image" alt="Карачаевск">
-          <h2 class="place__title">Домбай</h2>
-          <button type="button" class="favourite-button" aria-label="Добавить в избранное"></button>
-        </article>
-        <article class="place">
-          <img src="images/kirill-pershin-1088404-unsplash-optimized.jpg" class="place__image" alt="Карачаевск">
-          <h2 class="place__title">Карачаевск</h2>
-          <button type="button" class="favourite-button" aria-label="Добавить в избранное"></button>
-        </article>
       </section>
     </main>
     <footer class="footer">
       <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
     </footer>
-    <div class="edit-popup">
+    <div class="edit-popup edit-popup_action_edit">
       <div class="edit-popup__container">
         <button type="button" class="edit-popup__close" aria-label="Закрыть редактирование"></button>
         <h2 class="edit-popup__title">Редактировать профиль</h2>
@@ -71,6 +41,35 @@
         </form>
       </div>
     </div>
+    <div class="edit-popup edit-popup_action_add">
+      <div class="edit-popup__container">
+        <button type="button" class="edit-popup__close" aria-label="Новое место"></button>
+        <h2 class="edit-popup__title">Новое место</h2>
+        <form class="edit-popup__form" name="edit-form">
+          <input class="edit-popup__input edit-popup__input_field_place-name" type="text" placeholder="Название" required name="place-name">
+          <input class="edit-popup__input edit-popup__input_field_place-link" type="text" placeholder="Ссылка на картинку" required name="place-link">
+          <button type="submit" class="edit-popup__save" aria-label="Сохранить">Сохранить</button>
+        </form>
+      </div>
+    </div>
+    <div class="photo-popup">
+      <div>
+        <button type="button" class="photo-popup__close" aria-label="Просмотр фотографии"></button>
+        <figure>
+          <img src="images/kirill-pershin-1556355-unsplash-optimized.jpg" class="photo-popup__image">
+          <figcaption class="photo-popup__caption"></figcaption>
+        </figure>
+      </div>
+
+    </div>
+    <template id="place-template">
+      <article class="place">
+        <img src="images/kirill-pershin-1556355-unsplash-optimized.jpg" class="place__image" alt="Карачаевск">
+        <h2 class="place__title">Домбай</h2>
+        <button type="button" class="place__delete-button"></button>
+        <button type="button" class="favourite-button" aria-label="Добавить в избранное"></button>
+      </article>
+    </template>
   </div>
   <script src="scripts/script.js"></script>
 </body>
