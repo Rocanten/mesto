@@ -25,92 +25,80 @@ const initialCards = [
     }
 ];
 
-let editPopup = document.querySelector('.edit-popup_action_edit')
-let addPopup = document.querySelector('.edit-popup_action_add')
-let photoPopup = document.querySelector('.photo-popup')
-let editButton = document.querySelector('.profile__edit-button')
-let addButton = document.querySelector('.profile__add-button')
-let editCloseButton = editPopup.querySelector('.edit-popup__close')
-let addCloseButton = addPopup.querySelector('.edit-popup__close')
-let photoCloseButton = photoPopup.querySelector('.photo-popup__close')
-let photoPopupImage = photoPopup.querySelector('.photo-popup__image')
-let photoPopupCaption = photoPopup.querySelector('.photo-popup__caption')
+const editPopup = document.querySelector('.popup_action_edit')
+const addPopup = document.querySelector('.popup_action_add')
+const photoPopup = document.querySelector('.popup_action_photo')
+const editButton = document.querySelector('.profile__edit-button')
+const addButton = document.querySelector('.profile__add-button')
+const editCloseButton = editPopup.querySelector('.popup__close')
+const addCloseButton = addPopup.querySelector('.popup__close')
+const photoCloseButton = photoPopup.querySelector('.popup__close')
+const photoPopupImage = photoPopup.querySelector('.popup__image')
+const photoPopupCaption = photoPopup.querySelector('.popup__caption')
 
-let editFormElement = editPopup.querySelector('.edit-popup__form')
-let nameInput = editFormElement.querySelector('.edit-popup__input_field_name')
-let jobInput = editFormElement.querySelector('.edit-popup__input_field_description')
+const editFormElement = editPopup.querySelector('.popup__form')
+const nameInput = editFormElement.querySelector('.popup__input_field_name')
+const jobInput = editFormElement.querySelector('.popup__input_field_description')
 
-let addFormElement = addPopup.querySelector('.edit-popup__form')
-let placeNameInput = addFormElement.querySelector('.edit-popup__input_field_place-name')
-let placeLinkInput = addFormElement.querySelector('.edit-popup__input_field_place-link')
+const addFormElement = addPopup.querySelector('.popup__form')
+const placeNameInput = addFormElement.querySelector('.edit-popup__input_field_place-name')
+const placeLinkInput = addFormElement.querySelector('.popup__input_field_place-link')
 
-let profileName = document.querySelector('.profile__name')
-let profileDescription = document.querySelector('.profile__description')
+const profileName = document.querySelector('.profile__name')
+const profileDescription = document.querySelector('.profile__description')
 
-let places = document.querySelector('.places')
+const places = document.querySelector('.places')
 const placeTemplate = document.querySelector('#place-template').content
 
-function renderPlaces() {
-    places.innerHTML = ''
-    initialCards.forEach(function (card) {
-        let placeElement = placeTemplate.cloneNode(true)
-        placeElement.querySelector('.place__image').src = card.link
-        placeElement.querySelector('.place__image').addEventListener('click', openPhotoPopup)
-        placeElement.querySelector('.place__title').textContent = card.name
-        placeElement.querySelector('.favourite-button').addEventListener('click', likePlace)
-        placeElement.querySelector('.place__delete-button').addEventListener('click', deletePlace)
-        places.append(placeElement)
+function createPlace(card) {
+    const placeElement = placeTemplate.cloneNode(true)
+    placeElement.querySelector('.place__title').textContent = card.name
+    placeElement.querySelector('.place__image').src = card.link
+    placeElement.querySelector('.place__image').alt = card.name
+    placeElement.querySelector('.place__image').addEventListener('click', function (evt) {
+        openPopup(photoPopup, evt)
+    })
+    placeElement.querySelector('.favourite-button').addEventListener('click', likePlace)
+    placeElement.querySelector('.place__delete-button').addEventListener('click', deletePlace)
+    return placeElement
+}
+
+function initPlaces(cards) {
+    cards.forEach(function (card) {
+        const newPlace = createPlace(card)
+        places.prepend(newPlace)
     })
 }
 
 function likePlace(evt) {
-    let favouriteButton = evt.target
-    console.log(favouriteButton)
-    if(favouriteButton.classList.contains('favourite-button_active')) {
-        favouriteButton.classList.remove('favourite-button_active')
-    } else {
-        favouriteButton.classList.add('favourite-button_active')
-    }
+    const favouriteButton = evt.target
+    favouriteButton.classList.toggle('favourite-button_active')
 }
 
 function deletePlace(evt) {
-    let deleteButton = evt.target
-    let placeToDelete = deleteButton.parentNode
-    Array.from(places.children).forEach(function (element, index) {
-        if(element.isEqualNode(placeToDelete)) {
-            initialCards.splice(index, 1)
-        }
-    })
-    renderPlaces()
+    const deleteButton = evt.target
+    const placeToDelete = deleteButton.parentNode
+    placeToDelete.remove()
 }
 
-function openPhotoPopup(evt) {
-    let clickedImage = evt.target
-    photoPopupImage.src = clickedImage.src
-    photoPopupCaption.textContent = clickedImage.parentNode.querySelector('.place__title').textContent
-    photoPopup.classList.add('photo-popup_opened')
+function openPopup(popup, evt) {
+    if(popup.isEqualNode(editPopup))
+    {
+        nameInput.value = profileName.textContent
+        jobInput.value = profileDescription.textContent
+    }
+    if(popup.isEqualNode(photoPopup))
+    {
+        const element = evt.target.parentNode
+        photoPopupImage.src = element.querySelector('.place__image').src
+        photoPopupImage.alt = element.querySelector('.place__title').textContent
+        photoPopupCaption.textContent = element.querySelector('.place__title').textContent
+    }
+    popup.classList.toggle('popup_opened')
 }
 
-function openEditPopup() {
-    nameInput.value = profileName.textContent
-    jobInput.value = profileDescription.textContent
-    editPopup.classList.add('edit-popup_opened')
-}
-
-function openAddPopup() {
-    addPopup.classList.add('edit-popup_opened')
-}
-
-function closeEditPopup() {
-    editPopup.classList.remove('edit-popup_opened')
-}
-
-function closeAddPopup() {
-    addPopup.classList.remove('edit-popup_opened')
-}
-
-function closePhotoPopup() {
-    photoPopup.classList.remove('photo-popup_opened')
+function closePopup(popup) {
+    popup.classList.toggle('popup_opened')
 }
 
 function editFormSubmitHandler (evt) {
@@ -118,26 +106,38 @@ function editFormSubmitHandler (evt) {
 
     profileName.textContent = nameInput.value
     profileDescription.textContent = jobInput.value
-    closeEditPopup()
+    closePopup(editPopup)
 }
 
 function addFormSubmitHandler (evt) {
     evt.preventDefault();
-
-    initialCards.unshift({
+    const card = {
         name: placeNameInput.value,
         link: placeLinkInput.value
-    })
-    renderPlaces()
-    closeAddPopup()
+    }
+    const newPlace = createPlace(card)
+    places.prepend(newPlace)
+    closePopup(addPopup)
+    placeNameInput.value = ''
+    placeLinkInput.value = ''
 }
 
-editButton.addEventListener('click', openEditPopup)
-addButton.addEventListener('click', openAddPopup)
-editCloseButton.addEventListener('click', closeEditPopup)
-addCloseButton.addEventListener('click', closeAddPopup)
-photoCloseButton.addEventListener('click', closePhotoPopup)
+editButton.addEventListener('click', function () {
+    openPopup(editPopup)
+})
+addButton.addEventListener('click', function () {
+    openPopup(addPopup)
+})
+editCloseButton.addEventListener('click', function () {
+    closePopup(editPopup)
+})
+addCloseButton.addEventListener('click', function () {
+    closePopup(addPopup)
+})
+photoCloseButton.addEventListener('click', function () {
+    closePopup(photoPopup)
+})
 editFormElement.addEventListener('submit', editFormSubmitHandler);
 addFormElement.addEventListener('submit', addFormSubmitHandler);
 
-renderPlaces()
+initPlaces(initialCards)

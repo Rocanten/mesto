@@ -1,0 +1,4 @@
+.popup__close_image {
+    top: 8px;
+    left: calc(100% - 24px);
+}
