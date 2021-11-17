@@ -1,0 +1,6 @@
+.form__save_disabled {
+    opacity: 0.2;
+    background-color: transparent;
+    border: solid 1px #000;
+    color: #000;
+}

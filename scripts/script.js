@@ -36,13 +36,13 @@ const photoCloseButton = photoPopup.querySelector('.popup__close')
 const photoPopupImage = photoPopup.querySelector('.popup__image')
 const photoPopupCaption = photoPopup.querySelector('.popup__caption')
 
-const editFormElement = editPopup.querySelector('.popup__form')
-const nameInput = editFormElement.querySelector('.popup__input_field_name')
-const jobInput = editFormElement.querySelector('.popup__input_field_description')
+const editFormElement = editPopup.querySelector('.form')
+const nameInput = editFormElement.querySelector('.form__input_field_name')
+const jobInput = editFormElement.querySelector('.form__input_field_description')
 
-const addFormElement = addPopup.querySelector('.popup__form')
-const placeNameInput = addFormElement.querySelector('.popup__input_field_place-name')
-const placeLinkInput = addFormElement.querySelector('.popup__input_field_place-link')
+const addFormElement = addPopup.querySelector('.form')
+const placeNameInput = addFormElement.querySelector('.form__input_field_place-name')
+const placeLinkInput = addFormElement.querySelector('.form__input_field_place-link')
 
 const profileName = document.querySelector('.profile__name')
 const profileDescription = document.querySelector('.profile__description')
@@ -86,11 +86,13 @@ function deletePlace(evt) {
 }
 
 function openPopup(popup) {
+    document.addEventListener('keydown', escKeydownHandler)
     popup.classList.add('popup_opened')
 }
 
 function closePopup(popup) {
     popup.classList.remove('popup_opened')
+    document.removeEventListener('keydown', escKeydownHandler)
 }
 
 function editFormSubmitHandler (evt) {
@@ -131,7 +133,46 @@ addCloseButton.addEventListener('click', function () {
 photoCloseButton.addEventListener('click', function () {
     closePopup(photoPopup)
 })
+
+const addOverlayCloseListener = (popupElement, popupClass) => {
+    popupElement.addEventListener('click', function (evt) {
+        if(evt.target.classList.contains(popupClass.slice(1, popupClass.length))) {
+            closePopup(popupElement)
+        }
+    })
+}
+
+const escKeydownHandler = (evt) => {
+    if(evt.key === 'Escape') {
+        const allPopups = document.querySelectorAll('.popup')
+        allPopups.forEach(function (popup) {
+            closePopup(popup)
+        })
+    }
+}
+
+const setOverlayListeners = (popupClass) => {
+    const popupElements = document.querySelectorAll(popupClass)
+    popupElements.forEach(function (element) {
+        addOverlayCloseListener(element, popupClass)
+    })
+}
+
+
 editFormElement.addEventListener('submit', editFormSubmitHandler);
 addFormElement.addEventListener('submit', addFormSubmitHandler);
 
+setOverlayListeners('.popup')
+
 initPlaces(initialCards)
+
+enableValidation(
+    {
+        formSelector: '.form',
+        inputSelector: '.form__input',
+        submitButtonSelector: '.form__save',
+        inactiveButtonClass: 'form__save_disabled',
+        inputErrorClass: 'form__input_error',
+        errorClass: 'form__input-error_active'
+    }
+)
