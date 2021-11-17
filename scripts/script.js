@@ -41,7 +41,7 @@ const nameInput = editFormElement.querySelector('.popup__input_field_name')
 const jobInput = editFormElement.querySelector('.popup__input_field_description')
 
 const addFormElement = addPopup.querySelector('.popup__form')
-const placeNameInput = addFormElement.querySelector('.edit-popup__input_field_place-name')
+const placeNameInput = addFormElement.querySelector('.popup__input_field_place-name')
 const placeLinkInput = addFormElement.querySelector('.popup__input_field_place-link')
 
 const profileName = document.querySelector('.profile__name')
@@ -56,7 +56,11 @@ function createPlace(card) {
     placeElement.querySelector('.place__image').src = card.link
     placeElement.querySelector('.place__image').alt = card.name
     placeElement.querySelector('.place__image').addEventListener('click', function (evt) {
-        openPopup(photoPopup, evt)
+        const element = evt.target.parentNode
+        photoPopupImage.src = element.querySelector('.place__image').src
+        photoPopupImage.alt = element.querySelector('.place__title').textContent
+        photoPopupCaption.textContent = element.querySelector('.place__title').textContent
+        openPopup(photoPopup)
     })
     placeElement.querySelector('.favourite-button').addEventListener('click', likePlace)
     placeElement.querySelector('.place__delete-button').addEventListener('click', deletePlace)
@@ -81,24 +85,12 @@ function deletePlace(evt) {
     placeToDelete.remove()
 }
 
-function openPopup(popup, evt) {
-    if(popup.isEqualNode(editPopup))
-    {
-        nameInput.value = profileName.textContent
-        jobInput.value = profileDescription.textContent
-    }
-    if(popup.isEqualNode(photoPopup))
-    {
-        const element = evt.target.parentNode
-        photoPopupImage.src = element.querySelector('.place__image').src
-        photoPopupImage.alt = element.querySelector('.place__title').textContent
-        photoPopupCaption.textContent = element.querySelector('.place__title').textContent
-    }
-    popup.classList.toggle('popup_opened')
+function openPopup(popup) {
+    popup.classList.add('popup_opened')
 }
 
 function closePopup(popup) {
-    popup.classList.toggle('popup_opened')
+    popup.classList.remove('popup_opened')
 }
 
 function editFormSubmitHandler (evt) {
@@ -123,6 +115,8 @@ function addFormSubmitHandler (evt) {
 }
 
 editButton.addEventListener('click', function () {
+    nameInput.value = profileName.textContent
+    jobInput.value = profileDescription.textContent
     openPopup(editPopup)
 })
 addButton.addEventListener('click', function () {
