@@ -56,10 +56,9 @@ function createPlace(card) {
     placeElement.querySelector('.place__image').src = card.link
     placeElement.querySelector('.place__image').alt = card.name
     placeElement.querySelector('.place__image').addEventListener('click', function (evt) {
-        const element = evt.target.parentNode
-        photoPopupImage.src = element.querySelector('.place__image').src
-        photoPopupImage.alt = element.querySelector('.place__title').textContent
-        photoPopupCaption.textContent = element.querySelector('.place__title').textContent
+        photoPopupImage.src = card.link
+        photoPopupImage.alt = card.name
+        photoPopupCaption.textContent = card.name
         openPopup(photoPopup)
     })
     placeElement.querySelector('.favourite-button').addEventListener('click', likePlace)
@@ -103,6 +102,11 @@ function editFormSubmitHandler (evt) {
     closePopup(editPopup)
 }
 
+const disableSaveButton = (button) => {
+    button.classList.add(config.inactiveButtonClass);
+    button.setAttribute('disabled', true)
+}
+
 function addFormSubmitHandler (evt) {
     evt.preventDefault();
     const card = {
@@ -114,6 +118,7 @@ function addFormSubmitHandler (evt) {
     closePopup(addPopup)
     placeNameInput.value = ''
     placeLinkInput.value = ''
+    disableSaveButton(evt.target.querySelector('.form__save'))
 }
 
 editButton.addEventListener('click', function () {
@@ -144,10 +149,8 @@ const addOverlayCloseListener = (popupElement, popupClass) => {
 
 const escKeydownHandler = (evt) => {
     if(evt.key === 'Escape') {
-        const allPopups = document.querySelectorAll('.popup')
-        allPopups.forEach(function (popup) {
-            closePopup(popup)
-        })
+        const openedPopup = document.querySelector('.popup_opened')
+        closePopup(openedPopup)
     }
 }
 
