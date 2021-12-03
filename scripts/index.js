@@ -1,3 +1,15 @@
+import { FormValidator } from './FormValidator.js'
+import { Card } from "./Card.js";
+
+const settings = {
+    formSelector: '.form',
+    inputSelector: '.form__input',
+    submitButtonSelector: '.form__save',
+    inactiveButtonClass: 'form__save_disabled',
+    inputErrorClass: 'form__input_error',
+    errorClass: 'form__input-error_active'
+}
+
 const initialCards = [
     {
         name: 'Архыз',
@@ -48,41 +60,22 @@ const profileName = document.querySelector('.profile__name')
 const profileDescription = document.querySelector('.profile__description')
 
 const places = document.querySelector('.places')
-const placeTemplate = document.querySelector('#place-template').content
 
-function createPlace(card) {
-    const placeElement = placeTemplate.cloneNode(true)
-    placeElement.querySelector('.place__title').textContent = card.name
-    placeElement.querySelector('.place__image').src = card.link
-    placeElement.querySelector('.place__image').alt = card.name
-    placeElement.querySelector('.place__image').addEventListener('click', function (evt) {
-        photoPopupImage.src = card.link
-        photoPopupImage.alt = card.name
-        photoPopupCaption.textContent = card.name
-        openPopup(photoPopup)
-    })
-    placeElement.querySelector('.favourite-button').addEventListener('click', likePlace)
-    placeElement.querySelector('.place__delete-button').addEventListener('click', deletePlace)
-    return placeElement
-}
+const formList = Array.from(document.querySelectorAll('.form'));
+
 
 function initPlaces(cards) {
     cards.forEach(function (card) {
-        const newPlace = createPlace(card)
-        places.prepend(newPlace)
+        const newPlace = new Card(card, '#place-template', photoClick)
+        const placeElement = newPlace.generateCard()
+        places.prepend(placeElement)
     })
 }
 
-function likePlace(evt) {
-    const favouriteButton = evt.target
-    favouriteButton.classList.toggle('favourite-button_active')
-}
-
-function deletePlace(evt) {
-    const deleteButton = evt.target
-    const placeToDelete = deleteButton.parentNode
-    placeToDelete.remove()
-}
+formList.forEach((formElement) => {
+    const formValidator = new FormValidator(settings, formElement)
+    formValidator.enableValidation()
+});
 
 function openPopup(popup) {
     document.addEventListener('keydown', escKeydownHandler)
@@ -103,7 +96,7 @@ function editFormSubmitHandler (evt) {
 }
 
 const disableSaveButton = (button) => {
-    button.classList.add(config.inactiveButtonClass);
+    button.classList.add('form__save_disabled');
     button.setAttribute('disabled', true)
 }
 
@@ -113,12 +106,20 @@ function addFormSubmitHandler (evt) {
         name: placeNameInput.value,
         link: placeLinkInput.value
     }
-    const newPlace = createPlace(card)
-    places.prepend(newPlace)
+    const newPlace = new Card(card, '#place-template', photoClick)
+    const placeElement = newPlace.generateCard()
+    places.prepend(placeElement)
     closePopup(addPopup)
     placeNameInput.value = ''
     placeLinkInput.value = ''
     disableSaveButton(evt.target.querySelector('.form__save'))
+}
+
+function photoClick(data) {
+    photoPopupImage.src = data.link
+    photoPopupImage.alt = data.name
+    photoPopupCaption.textContent = data.name
+    openPopup(photoPopup)
 }
 
 editButton.addEventListener('click', function () {
@@ -168,14 +169,3 @@ addFormElement.addEventListener('submit', addFormSubmitHandler);
 setOverlayListeners('.popup')
 
 initPlaces(initialCards)
-
-enableValidation(
-    {
-        formSelector: '.form',
-        inputSelector: '.form__input',
-        submitButtonSelector: '.form__save',
-        inactiveButtonClass: 'form__save_disabled',
-        inputErrorClass: 'form__input_error',
-        errorClass: 'form__input-error_active'
-    }
-)
