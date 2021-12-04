@@ -62,25 +62,14 @@ const formList = Array.from(document.querySelectorAll('.form'));
 
 const popups = document.querySelectorAll('.popup')
 
-function createValidators() {
-    return formList.map((formElement) => {
-        return new FormValidator(settings, formElement)
-    })
-}
+const editForm = editPopup.querySelector('.form')
+const cardForm = addPopup.querySelector('.form')
 
-const validators = createValidators()
+const editFormValidator = new FormValidator(settings, editForm);
+const cardFormValidator = new FormValidator(settings, cardForm);
 
-function initValidators() {
-    validators.forEach((validator) => {
-        validator.enableValidation()
-    })
-}
-
-function resetValidators() {
-    validators.forEach((validator) => {
-        validator.resetValidation()
-    })
-}
+editFormValidator.enableValidation();
+cardFormValidator.enableValidation();
 
 function initPlaces(cards) {
     cards.forEach(function (card) {
@@ -128,7 +117,7 @@ function addFormSubmitHandler (evt) {
     closePopup(addPopup)
     placeNameInput.value = ''
     placeLinkInput.value = ''
-    resetValidators()
+    cardFormValidator.resetValidation()
 }
 
 function clickPhoto(data) {
@@ -141,10 +130,11 @@ function clickPhoto(data) {
 editButton.addEventListener('click', function () {
     nameInput.value = profileName.textContent
     jobInput.value = profileDescription.textContent
+    editFormValidator.resetValidation()
     openPopup(editPopup)
 })
 addButton.addEventListener('click', function () {
-    resetValidators()
+    cardFormValidator.resetValidation()
     openPopup(addPopup)
 })
 
@@ -173,6 +163,4 @@ addFormElement.addEventListener('submit', addFormSubmitHandler);
 
 addPopupCloseListeners()
 
-initValidators()
-resetValidators()
 initPlaces(initialCards)
