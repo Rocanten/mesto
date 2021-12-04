@@ -42,9 +42,6 @@ const addPopup = document.querySelector('.popup_action_add')
 const photoPopup = document.querySelector('.popup_action_photo')
 const editButton = document.querySelector('.profile__edit-button')
 const addButton = document.querySelector('.profile__add-button')
-const editCloseButton = editPopup.querySelector('.popup__close')
-const addCloseButton = addPopup.querySelector('.popup__close')
-const photoCloseButton = photoPopup.querySelector('.popup__close')
 const photoPopupImage = photoPopup.querySelector('.popup__image')
 const photoPopupCaption = photoPopup.querySelector('.popup__caption')
 
@@ -63,19 +60,43 @@ const places = document.querySelector('.places')
 
 const formList = Array.from(document.querySelectorAll('.form'));
 
+const popups = document.querySelectorAll('.popup')
 
-function initPlaces(cards) {
-    cards.forEach(function (card) {
-        const newPlace = new Card(card, '#place-template', photoClick)
-        const placeElement = newPlace.generateCard()
-        places.prepend(placeElement)
+function createValidators() {
+    return formList.map((formElement) => {
+        return new FormValidator(settings, formElement)
     })
 }
 
-formList.forEach((formElement) => {
-    const formValidator = new FormValidator(settings, formElement)
-    formValidator.enableValidation()
-});
+const validators = createValidators()
+
+function initValidators() {
+    validators.forEach((validator) => {
+        validator.enableValidation()
+    })
+}
+
+function resetValidators() {
+    validators.forEach((validator) => {
+        validator.resetValidation()
+    })
+}
+
+function initPlaces(cards) {
+    cards.forEach(function (card) {
+        const placeElement = createCard(card)
+        renderCard(placeElement)
+    })
+}
+
+function createCard(cardData) {
+    const card = new Card(cardData, '#place-template', clickPhoto)
+    return card.generateCard()
+}
+
+function renderCard(cardElement) {
+    places.prepend(cardElement)
+}
 
 function openPopup(popup) {
     document.addEventListener('keydown', escKeydownHandler)
@@ -95,27 +116,22 @@ function editFormSubmitHandler (evt) {
     closePopup(editPopup)
 }
 
-const disableSaveButton = (button) => {
-    button.classList.add('form__save_disabled');
-    button.setAttribute('disabled', true)
-}
-
 function addFormSubmitHandler (evt) {
     evt.preventDefault();
     const card = {
         name: placeNameInput.value,
         link: placeLinkInput.value
     }
-    const newPlace = new Card(card, '#place-template', photoClick)
+    const newPlace = new Card(card, '#place-template', clickPhoto)
     const placeElement = newPlace.generateCard()
     places.prepend(placeElement)
     closePopup(addPopup)
     placeNameInput.value = ''
     placeLinkInput.value = ''
-    disableSaveButton(evt.target.querySelector('.form__save'))
+    resetValidators()
 }
 
-function photoClick(data) {
+function clickPhoto(data) {
     photoPopupImage.src = data.link
     photoPopupImage.alt = data.name
     photoPopupCaption.textContent = data.name
@@ -128,23 +144,20 @@ editButton.addEventListener('click', function () {
     openPopup(editPopup)
 })
 addButton.addEventListener('click', function () {
+    resetValidators()
     openPopup(addPopup)
 })
-editCloseButton.addEventListener('click', function () {
-    closePopup(editPopup)
-})
-addCloseButton.addEventListener('click', function () {
-    closePopup(addPopup)
-})
-photoCloseButton.addEventListener('click', function () {
-    closePopup(photoPopup)
-})
 
-const addOverlayCloseListener = (popupElement, popupClass) => {
-    popupElement.addEventListener('click', function (evt) {
-        if(evt.target.classList.contains(popupClass.slice(1, popupClass.length))) {
-            closePopup(popupElement)
-        }
+function addPopupCloseListeners() {
+    popups.forEach((popup) => {
+        popup.addEventListener('click', (evt) => {
+            if (evt.target.classList.contains('popup_opened')) {
+                closePopup(popup)
+            }
+            if (evt.target.classList.contains('popup__close')) {
+                closePopup(popup)
+            }
+        })
     })
 }
 
@@ -155,17 +168,11 @@ const escKeydownHandler = (evt) => {
     }
 }
 
-const setOverlayListeners = (popupClass) => {
-    const popupElements = document.querySelectorAll(popupClass)
-    popupElements.forEach(function (element) {
-        addOverlayCloseListener(element, popupClass)
-    })
-}
-
-
 editFormElement.addEventListener('submit', editFormSubmitHandler);
 addFormElement.addEventListener('submit', addFormSubmitHandler);
 
-setOverlayListeners('.popup')
+addPopupCloseListeners()
 
+initValidators()
+resetValidators()
 initPlaces(initialCards)

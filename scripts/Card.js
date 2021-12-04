@@ -5,6 +5,14 @@ export class Card {
         this._photoClickHandler = photoClickHandler
     }
 
+    generateCard() {
+        this._element = this._getElement()
+        this._findElements()
+        this._setEventListeners()
+        this._setData()
+        return this._element
+    }
+
     _getElement() {
         const element = document
             .querySelector(this._selector)
@@ -14,19 +22,19 @@ export class Card {
         return element
     }
 
-    generateCard() {
-        this._element = this._getElement()
-        this._setEventListeners()
-        this._setData()
-        return this._element
+    _findElements() {
+        this._imageElement = this._element.querySelector('.place__image')
+        this._favouriteButtonElement = this._element.querySelector('.favourite-button')
+        this._deleteButtonElement = this._element.querySelector('.place__delete-button')
+        this._titleElement = this._element.querySelector('.place__title')
     }
 
     _setEventListeners() {
-        this._element.querySelector('.place__image').addEventListener('click', () => {
+        this._imageElement.addEventListener('click', () => {
             this._photoClickHandler(this._data)
         })
-        this._element.querySelector('.favourite-button').addEventListener('click', this._likePlace)
-        this._element.querySelector('.place__delete-button').addEventListener('click', this._deletePlace)
+        this._favouriteButtonElement.addEventListener('click', this._likePlace)
+        this._deleteButtonElement.addEventListener('click', this._deletePlace)
     }
 
     _likePlace(evt) {
@@ -41,7 +49,8 @@ export class Card {
     }
 
     _setData() {
-        this._element.querySelector('.place__image').src = this._data.link
-        this._element.querySelector('.place__title').textContent = this._data.name
+        this._imageElement.src = this._data.link
+        this._imageElement.alt = this._data.name
+        this._titleElement.textContent = this._data.name
     }
 }
